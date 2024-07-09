@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
+const validator=require("validator");
 
 exports.register = async (req, res) => {
     const { username, email, password, phone } = req.body;
@@ -8,8 +9,17 @@ exports.register = async (req, res) => {
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(406).json("Account already exists, Please Login");
+            return res.status(400).json("Account already exists, Please Login");
         }
+
+        //  Validating email format and password
+        if (!validator.isEmail(email)) {
+            return res.status(406).json({ success: false, message: 'Please enter a valid email' });
+         }
+
+        if (password.length < 6) {
+             return res.status(400).json({ success: false, message: 'Please enter a strong password' });
+      }
 
         // Encrypt password
         const salt = await bcrypt.genSalt(10);
@@ -29,6 +39,50 @@ exports.register = async (req, res) => {
         res.status(400).json({ message: `Register API failed, Error: ${err}` });
     }
 };
+
+
+
+
+
+// exports.register = async (req, res) => {
+//     const { username, email, password, phone } = req.body;
+//     try {
+//         const existsUser = await User.findOne({ email });
+//         if (existsUser) {
+//             return res.status(400).json({ success: false, message: 'User already exists' });
+//         }
+
+//         // Validating email format and password
+//         if (!validator.isEmail(email)) {
+//             return res.status(406).json({ success: false, message: 'Please enter a valid email' });
+//         }
+
+//         if (password.length < 6) {
+//             return res.status(400).json({ success: false, message: 'Please enter a strong password' });
+//         }
+
+//         // Hashing user password
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(password, salt);
+
+//         const newUser = new User({
+//             username,
+//             email,
+//             password: hashedPassword,
+//             phone
+//         });
+
+//         const user = await newUser.save();
+//         return res.status(200).json({ success: true, user});
+
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({ message: error.message });
+// }
+// }
+
+
+
 
 
 exports.login = async (req, res) => {
@@ -89,6 +143,10 @@ exports.googleLogin = async (req, res) => {
         res.status(500).json("Internal Server Error");
     }
 };
+
+  
+  
+
 
 
 
