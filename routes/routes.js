@@ -15,4 +15,5 @@ router.post('/admin',jwtMiddleware,userController.dummyAPI)
 router.post("/emailOtp",emailVerification.sendEmail);
 router.post("/emailverification",emailVerification.verifyOtp);
 router.post("/phoneOtp",phoneContoller.sendPhoneOtp)
+router.post('/phoneotpverify',phoneContoller.verifyPhoneOtp)
 module.exports=router;

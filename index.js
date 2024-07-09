@@ -3,6 +3,7 @@ const express=require('express')
 const cors=require('cors')
 const router=require('./routes/routes')
 const foodRouter=require('./routes/foodRoutes')
+const cartRouter=require('./routes/cartRoutes')
 const session = require('express-session');
 require('./db/connection')
 const projectApp=express()
@@ -25,6 +26,8 @@ projectApp.use(
 projectApp.use(express.json())
 projectApp.use(router)
 projectApp.use(foodRouter)
+projectApp.use(cartRouter)
+projectApp.use("/images",express.static('uploads'))
 const PORT=5002 || process.env.PORT
 
 projectApp.listen(PORT,()=>{

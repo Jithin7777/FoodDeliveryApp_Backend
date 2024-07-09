@@ -15,5 +15,9 @@ const upload=multer({storage:storage})
 
 
 foodRouter.post('/add',upload.single('image'),foodController.addfood)
+foodRouter.get('/foodlist',foodController.listFood)
+foodRouter.post('/remove',foodController.removeFood)
+
+
 
 module.exports=foodRouter;

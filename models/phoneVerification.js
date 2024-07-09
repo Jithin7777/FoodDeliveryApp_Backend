@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 const phoneSchema=new mongoose.Schema({
-    phoneNumber:{
+    phone:{
         type:String
     },
     otp:{

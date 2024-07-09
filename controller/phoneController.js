@@ -14,20 +14,20 @@ const generateOTP = () => {
 
 
 exports.sendPhoneOtp = async (req, res) => {
-  const { phoneNumber } = req.body;
+  const { phone } = req.body;
   const otp = generateOTP();
 
 
   // Save OTP to MongoDB
-  const phoneOtpDocument = new phoneSchema({ phoneNumber, otp });
+  const phoneOtpDocument = new phoneSchema({ phone, otp });
 
 try {
-    await phoneSchema.deleteMany({ phoneNumber });
+    await phoneSchema.deleteMany({ phone });
     await phoneOtpDocument.save();
     await client.messages.create({
       body: `Your OTP is ${otp}`,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${phoneNumber}`,
+      to: `+91${phone}`,
     });
     res.send({ success: true, otp: otp });
   } catch (err) {
@@ -38,11 +38,11 @@ try {
 
  
 
-exports.verifyOtp = async (req, res) => {
+exports.verifyPhoneOtp = async (req, res) => {
   try {
-    const { otp, phoneNumber } = req.body;
+    const { otp, phone } = req.body;
 
-    const existingOtpEntry = await phoneSchema.findOne({ phoneNumber, otp });
+    const existingOtpEntry = await phoneSchema.findOne({ phone, otp });
     console.log(existingOtpEntry);
 
     if (!existingOtpEntry) {
@@ -50,11 +50,11 @@ exports.verifyOtp = async (req, res) => {
     }
 
     if (existingOtpEntry.expiresAt < Date.now()) {
-      await phoneSchema.deleteMany({ phoneNumber, otp });
+      await phoneSchema.deleteMany({ phone, otp });
       return res.status(410).json({ error: "OTP expired" });
     }
 
-    const userRecord = await user.findOne({ phoneNumber });
+    const userRecord = await user.findOne({ phone });
 
     if (!userRecord) {
       return res.status(404).json({ error: "User not found" });
@@ -63,7 +63,7 @@ exports.verifyOtp = async (req, res) => {
     userRecord.phoneVerification = true;
     const updatedUser = await userRecord.save();
 
-    await phoneSchema.deleteMany({ phoneNumber, otp });
+    await phoneSchema.deleteMany({ phone, otp });
 
     return res.status(200).json({
       message: "Phone verified successfully",
