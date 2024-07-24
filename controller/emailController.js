@@ -17,10 +17,10 @@ exports.sendEmail = async (req, res) => {
   try {
     const { email } = req.body;
     const mailOptions = {
-        from: process.env.EMAIL_FROM,
-        to: email,
-        subject: "Email Verification",
-        html: `
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: "Email Verification",
+      html: `
           <html>
             <head>
               <style>
@@ -81,8 +81,8 @@ exports.sendEmail = async (req, res) => {
             </body>
           </html>
         `,
-      };
-          // const salt = await bcrypt.genSalt(10);
+    };
+    // const salt = await bcrypt.genSalt(10);
     // const hashedOtp = await bcrypt.hash(otp.toString(), salt);
 
     const newVerification = await new emailSchema({

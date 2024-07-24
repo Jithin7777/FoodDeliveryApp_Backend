@@ -11,17 +11,14 @@ const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
 
-
-
 exports.sendPhoneOtp = async (req, res) => {
   const { phone } = req.body;
   const otp = generateOTP();
 
-
   // Save OTP to MongoDB
   const phoneOtpDocument = new phoneSchema({ phone, otp });
 
-try {
+  try {
     await phoneSchema.deleteMany({ phone });
     await phoneOtpDocument.save();
     await client.messages.create({
@@ -35,8 +32,6 @@ try {
     res.status(500).send({ success: false, error: "Failed to send OTP" });
   }
 };
-
- 
 
 exports.verifyPhoneOtp = async (req, res) => {
   try {
