@@ -58,4 +58,10 @@ try {
 }
 }
 
-module.exports={placeOrder}
+const verifyOrder=async(req,res)=>{
+
+}
+
+
+
+module.exports={placeOrder,verifyOrder}
