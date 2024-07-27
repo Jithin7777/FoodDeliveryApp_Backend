@@ -1,4 +1,5 @@
 // const { Message } = require('twilio/lib/twiml/MessagingResponse')
+const orderModel = require('../models/orderModel')
 const orderSchema=require('../models/orderModel')
 const user=require('../models/userModel')
 const Stripe=require('stripe')
@@ -58,8 +59,22 @@ try {
 }
 }
 
-const verifyOrder=async(req,res)=>{
 
+const verifyOrder=async(req,res)=>{
+const {orderId,success}=req.body;
+try {
+    if (success == true){
+        await orderModel.findByIdAndUpdate(orderId,{payment:true});
+        res.json({success:true,message:"PAID"})
+    }
+    else{
+        await orderModel.findByIdAndDelete(orderId)
+        res.json({sucess:false,message:"Not Paid"})
+    }
+} catch (error) {
+    console.log(error);
+    res.json({success:false,message:"Error"})
+}
 }
 
 
