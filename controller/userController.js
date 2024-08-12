@@ -4,9 +4,6 @@ const jwt = require("jsonwebtoken");
 const validator = require("validator");
 
 
-
-
-
 exports.register = async (req, res) => {
   const { username, email, password, phone } = req.body;
   try {
@@ -109,6 +106,7 @@ exports.googleLogin = async (req, res) => {
     res.status(500).json("Internal Server Error");
   }
 };
+
 
 exports.dummyAPI = async (req, res) => {
   try {

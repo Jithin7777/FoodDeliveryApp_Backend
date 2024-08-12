@@ -33,6 +33,9 @@ exports.sendPhoneOtp = async (req, res) => {
   }
 };
 
+
+
+
 exports.verifyPhoneOtp = async (req, res) => {
   try {
     const { otp, phone } = req.body;
