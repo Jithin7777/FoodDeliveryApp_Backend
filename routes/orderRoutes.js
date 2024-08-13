@@ -8,5 +8,6 @@ orderRouter.post('/order/placeOrder',authMiddleware,orderController.placeOrder)
 orderRouter.post('/order/verify',orderController.verifyOrder)
 orderRouter.post('/order/userorders',authMiddleware,orderController.userOrders)
 orderRouter.get('/order/userorderslist',orderController.listOrders)
+orderRouter.post('/order/orderstatus',orderController.updateStatus)
 
 module.exports=orderRouter;
